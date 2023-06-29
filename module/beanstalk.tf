@@ -1,44 +1,54 @@
 # Create elastic beanstalk application
- 
+
 resource "aws_elastic_beanstalk_application" "elasticapp" {
   name = var.application
 }
- 
+
 # Create elastic beanstalk Environment
- 
+
 resource "aws_elastic_beanstalk_environment" "beanstalkappenv" {
-  for_each = var.environment
+  for_each            = var.environment
   name                = join("-", [var.application, each.key])
   application         = aws_elastic_beanstalk_application.elasticapp.name
   solution_stack_name = each.value["solution_stack_name"]
   tier                = each.value["tier"]
- 
+
+  dynamic "setting" {
+    for_each = each.value["setting"]
+    content {
+      namespace = setting.value["namespace"]
+      name      = setting.value["name"]
+      value     = setting.value["value"]
+    }
+  }
+
+
   setting {
     namespace = "aws:ec2:vpc"
     name      = "VPCId"
     value     = var.vpc_id
   }
-  setting {
-    namespace = "aws:autoscaling:launchconfiguration"
-    name      = "IamInstanceProfile"
-    value     =  "aws-elasticbeanstalk-ec2-role"
-  }
+  #setting {
+  #  namespace = "aws:autoscaling:launchconfiguration"
+  #  name      = "IamInstanceProfile"
+  #  value     = "aws-elasticbeanstalk-ec2-role"
+  #}
   setting {
     namespace = "aws:ec2:vpc"
     name      = "AssociatePublicIpAddress"
-    value     =  "True"
+    value     = "True"
   }
- 
+
   setting {
     namespace = "aws:ec2:vpc"
     name      = "Subnets"
     value     = join(",", var.public_subnets)
   }
-  setting {
-    namespace = "aws:elasticbeanstalk:environment:process:default"
-    name      = "MatcherHTTPCode"
-    value     = "200"
-  }
+  #setting {
+  #  namespace = "aws:elasticbeanstalk:environment:process:default"
+  #  name      = "MatcherHTTPCode"
+  #  value     = "200"
+  #}
   setting {
     namespace = "aws:elasticbeanstalk:environment"
     name      = "LoadBalancerType"
@@ -64,10 +74,10 @@ resource "aws_elastic_beanstalk_environment" "beanstalkappenv" {
     name      = "MaxSize"
     value     = 2
   }
-  setting {
-    namespace = "aws:elasticbeanstalk:healthreporting:system"
-    name      = "SystemType"
-    value     = "enhanced"
-  }
- 
+  #setting {
+  #  namespace = "aws:elasticbeanstalk:healthreporting:system"
+  #  name      = "SystemType"
+  #  value     = "enhanced"
+  #}
+
 }

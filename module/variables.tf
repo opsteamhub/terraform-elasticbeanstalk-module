@@ -21,6 +21,11 @@ variable "environment" {
   type = map(object({
     solution_stack_name = optional(string, "64bit Amazon Linux 2 v5.8.2 running Node.js 18")
     tier                = optional(string, "WebServer")
+    setting = map(object({
+      namespace = optional(string, "aws:autoscaling:launchconfiguration")
+      name      = optional(string,"IamInstanceProfile")
+      value     = optional(string, "aws-elasticbeanstalk-ec2-role") 
+    }))
   }))
   default = {}
 }
