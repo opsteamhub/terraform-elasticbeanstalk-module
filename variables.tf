@@ -31,7 +31,6 @@ variable "environment" {
     public_subnets      = optional(list(string), [""])
     loadbalancer_type   = optional(string, "application")
     associace_public_ip = optional(string, "False")
-    solution_stack_name = optional(string, "64bit Amazon Linux 2 v3.5.9 running Docker")
     setting = map(object({
       namespace = optional(string, "aws:autoscaling:launchconfiguration")
       name      = optional(string, "IamInstanceProfile")
