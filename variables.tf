@@ -1,8 +1,6 @@
 variable "application" {
-  requeired   = yes
   description = "Application Name"
   type        = string
-  default     = "defaultapp"
 }
 
 variable "provisioned" {
@@ -17,7 +15,6 @@ variable "owner" {
 }
 
 variable "environment" {
-  required = yes
   description = "Custom Parameters for environment"
   type = map(object({
     solution_stack_name = optional(string, "64bit Amazon Linux 2 v3.5.9 running Docker")
