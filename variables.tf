@@ -1,16 +1,15 @@
 variable "application" {
+  description = "Application Name"
   default = "defaultapp"
 }
 
 variable "owner" {
+  description = "Project Owner"
   default = "OpsTeam"
 }
 
-variable "project" {
-  default = "beanstalk"
-}
-
 variable "environment" {
+  description = "Custom Parameters for environment"
   type = map(object({
     solution_stack_name = optional(string, "64bit Amazon Linux 2 v3.5.9 running Docker")
     tier                = optional(string, "WebServer")
