@@ -4,6 +4,7 @@ variable "application" {
 }
 
 variable "provisioned" {
+  description = "Provisioning By Terraform"
   type    = string
   default = "Terraform"
 }
