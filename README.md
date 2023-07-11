@@ -1,3 +1,6 @@
+## Terraform Elasticbeanstalk Module
+Provisioning application and environments.
+
 ## Requirements
 
 No requirements.
