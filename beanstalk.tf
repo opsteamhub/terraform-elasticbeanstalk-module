@@ -26,7 +26,7 @@ resource "aws_elastic_beanstalk_environment" "beanstalkappenv" {
   for_each            = var.environment
   name                = join("-", [var.application, each.key])
   application         = aws_elastic_beanstalk_application.elasticapp.name
-  solution_stack_name = can(each.value["solution_stack_name"]) ? each.value["solution_stack_name"] : var.solution_stack_name
+  solution_stack_name = can(each.value["solution_stack_name"]) ? each.value["solution_stack_name"] : each.value["solution_stack_name"]
   tier                = each.value["tier"]
 
   dynamic "setting" {
@@ -92,6 +92,11 @@ resource "aws_elastic_beanstalk_environment" "beanstalkappenv" {
     namespace = "aws:ec2:vpc"
     name      = "ELBScheme"
     value     = each.value["elb_scheme"]
+  }
+  setting {
+    namespace = "aws:elbv2:listener:443"
+    name      = "SSLCertificateArns"
+    value     = data.aws_acm_certificate.issued[each.key].arn
   }
   setting {
     namespace = "aws:autoscaling:asg"
@@ -166,4 +171,11 @@ data "aws_lb" "dns_name" {
 
 data "aws_elb_hosted_zone_id" "main" {
   for_each = var.environment
+}
+
+data "aws_acm_certificate" "issued" {
+  for_each    = var.environment
+  domain      = each.value["cert_domain"]
+  statuses    = ["ISSUED"]
+  most_recent = true
 }
