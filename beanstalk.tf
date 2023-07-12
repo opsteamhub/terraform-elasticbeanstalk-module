@@ -116,17 +116,17 @@ resource "aws_elastic_beanstalk_environment" "beanstalkappenv" {
   setting {
     namespace = "aws:elasticbeanstalk:cloudwatch:logs"
     name      = "StreamLogs"
-    value     = "true"
+    value     = each.value["streamlogs"]
   }
   setting {
     namespace = "aws:elasticbeanstalk:cloudwatch:logs"
     name      = "RetentionInDays"
-    value     = "7"
+    value     = each.value["retentionlogsdays"]
   }
   setting {
     namespace = "aws:elasticbeanstalk:cloudwatch:logs"
     name      = "DeleteOnTerminate"
-    value     = "true"
+    value     = each.value["deleteonterminate"]
   }  
 
 }
