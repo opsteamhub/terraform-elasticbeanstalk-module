@@ -1,7 +1,7 @@
 data "aws_route53_zone" "selected" {
   for_each     = var.environment
   name         = each.value["zone_name"]
-  private_zone = false
+  private_zone = each.value["private_zone"]
 }
 
 data "aws_lb" "dns_name" {

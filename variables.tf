@@ -5,8 +5,8 @@ variable "application" {
 
 variable "provisioned" {
   description = "Provisioning By Terraform"
-  type    = string
-  default = "Terraform"
+  type        = string
+  default     = "Terraform"
 }
 
 variable "owner" {
@@ -31,9 +31,10 @@ variable "environment" {
     public_subnets      = optional(list(string), [""])
     loadbalancer_type   = optional(string, "application")
     associace_public_ip = optional(string, "False")
-    retentionlogsdays  = optional(string, "1")
+    retentionlogsdays   = optional(string, "1")
     streamlogs          = optional(string, "false")
     deleteonterminate   = optional(string, "true")
+    private_zone        = optional(bool, false)
     setting = map(object({
       namespace = optional(string, "aws:autoscaling:launchconfiguration")
       name      = optional(string, "IamInstanceProfile")

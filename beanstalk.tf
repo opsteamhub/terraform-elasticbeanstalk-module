@@ -107,7 +107,7 @@ resource "aws_elastic_beanstalk_environment" "beanstalkappenv" {
     namespace = "aws:elasticbeanstalk:cloudwatch:logs"
     name      = "DeleteOnTerminate"
     value     = each.value["deleteonterminate"]
-  }  
+  }
 }
 
 data "aws_lb_listener" "http_listener" {
