@@ -113,6 +113,21 @@ resource "aws_elastic_beanstalk_environment" "beanstalkappenv" {
     name      = "SystemType"
     value     = "enhanced"
   }
+  setting {
+    namespace = "aws:elasticbeanstalk:cloudwatch:logs"
+    name      = "StreamLogs"
+    value     = "true"
+  }
+  setting {
+    namespace = "aws:elasticbeanstalk:cloudwatch:logs"
+    name      = "RetentionInDays"
+    value     = "7"
+  }
+  setting {
+    namespace = "aws:elasticbeanstalk:cloudwatch:logs"
+    name      = "DeleteOnTerminate"
+    value     = "true"
+  }  
 
 }
 
