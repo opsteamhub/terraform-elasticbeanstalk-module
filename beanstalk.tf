@@ -209,3 +209,9 @@ resource "aws_iam_role" "ec2_role" {
     ]
   })
 }
+
+resource "aws_iam_instance_profile" "profile" {
+  for_each = var.environment
+  name = aws_iam_role.ec2_role[each.key].name
+  role = aws_iam_role.ec2_role[each.key].name
+}
