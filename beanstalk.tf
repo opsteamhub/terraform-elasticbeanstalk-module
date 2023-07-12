@@ -1,26 +1,6 @@
-#data "aws_elastic_beanstalk_solution_stack" "multi_docker" {
-#  for_each            = var.environment
-#  most_recent = true
-#
-#  name_regex = "^64bit Amazon Linux (.*) running Docker"
-#  #name_regex = "64bit Amazon Linux 2 v3.5.9 running Docker"
-#
-#}
-
-#data "aws_elastic_beanstalk_solution_stack" "docker" {
-#  for_each            = var.environment
-#  most_recent = true
-#  name_regex = "^64bit Amazon Linux (.*) running Docker"
-#}
-
-
-# Create elastic beanstalk application
-
 resource "aws_elastic_beanstalk_application" "elasticapp" {
   name = var.application
 }
-
-# Create elastic beanstalk Environment
 
 resource "aws_elastic_beanstalk_environment" "beanstalkappenv" {
   for_each            = var.environment
@@ -128,9 +108,7 @@ resource "aws_elastic_beanstalk_environment" "beanstalkappenv" {
     name      = "DeleteOnTerminate"
     value     = each.value["deleteonterminate"]
   }  
-
 }
-
 
 data "aws_lb_listener" "http_listener" {
   for_each          = var.environment
@@ -193,4 +171,41 @@ data "aws_acm_certificate" "issued" {
   domain      = each.value["cert_domain"]
   statuses    = ["ISSUED"]
   most_recent = true
+}
+
+resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkWebTier" {
+  for_each = var.environment
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
+  role       = aws_iam_role.ec2_role[each.key].name
+}
+
+resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkWorkerTier" {
+  for_each = var.environment
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier"
+  role       = aws_iam_role.ec2_role[each.key].name
+}
+
+resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkMulticontainerDocker" {
+  for_each = var.environment
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker"
+  role       = aws_iam_role.ec2_role[each.key].name
+}
+
+resource "aws_iam_role" "ec2_role" {
+  for_each = var.environment
+  name = join("-", var.application, each.key, "role")
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      },
+    ]
+  })
 }
