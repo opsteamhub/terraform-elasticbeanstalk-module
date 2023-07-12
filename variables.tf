@@ -32,7 +32,7 @@ variable "environment" {
     loadbalancer_type   = optional(string, "application")
     associace_public_ip = optional(string, "False")
     rententionlogsdays  = optional(string, "1")
-    streamlogs          = optional(string, "false")
+    streamlogs          = optional(string, "true")
     deleteonterminate   = optional(string, "true")
     setting = map(object({
       namespace = optional(string, "aws:autoscaling:launchconfiguration")
