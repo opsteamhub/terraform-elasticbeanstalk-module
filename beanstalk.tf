@@ -193,7 +193,7 @@ resource "aws_iam_role_policy_attachment" "AWSElasticBeanstalkMulticontainerDock
 
 resource "aws_iam_role" "ec2_role" {
   for_each = var.environment
-  name = join("-", var.application, each.key, "role")
+  name = join("-", [var.application, each.key, "role"])
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
