@@ -35,6 +35,9 @@ variable "environment" {
     streamlogs          = optional(string, "false")
     deleteonterminate   = optional(string, "true")
     private_zone        = optional(bool, false)
+    app_port            = optional(string, "80")
+    healthcheck_path    = optional(string, "/")
+    http_status_code    = optional(string, "200")
     setting = map(object({
       namespace = optional(string, "aws:autoscaling:launchconfiguration")
       name      = optional(string, "IamInstanceProfile")

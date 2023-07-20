@@ -108,6 +108,21 @@ resource "aws_elastic_beanstalk_environment" "beanstalkappenv" {
     name      = "DeleteOnTerminate"
     value     = each.value["deleteonterminate"]
   }
+  setting {
+    namespace = "aws:elasticbeanstalk:environment:process:default"
+    name      = "Port"
+    value     = each.value["app_port"]
+  }  
+  setting {
+    namespace = "aws:elasticbeanstalk:environment:process:default"
+    name      = "HealthCheckPath"
+    value     = each.value["healthcheck_path"]
+  }  
+  setting {
+    namespace = "aws:elasticbeanstalk:environment:process:default"
+    name      = "MatcherHTTPCode"
+    value     = each.value["http_status_code"]
+  }     
 }
 
 data "aws_lb_listener" "http_listener" {
